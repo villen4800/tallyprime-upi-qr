@@ -1,0 +1,30 @@
+;; =================================================================
+;;  UPI QR CODE ON INVOICE - TALLY PRIME 7.1 TDL
+;;  SSB COMPUTER CENTRE | ssbcomputer@kotak
+;; =================================================================
+
+[System: Formula]
+    ;; Using $$String with parenthesis ($Amount) to get the raw unformatted string value without spaces.
+    SSBUpiQR : "upi://pay?pa=ssbcomputer@kotak&am=" + $$String:($Amount) + "&cu=INR&tn=Inv-" + $VoucherNumber
+
+;; ==========================================
+;; ADD QR CODE TO THE RIGHT SIGNATORY FOOTER
+;; ==========================================
+
+[#Part: EXPINV SignOff]
+    ;; Add our QR Code part directly to the signatory container
+    Add: Parts: SSB Signatory QR Image Part
+
+;; --- QR Code Image Container ---
+[Part: SSB Signatory QR Image Part]
+    Lines: SSB Signatory QR Img Ln
+    QR Code: @@SSBUpiQR : Yes
+    Height: 18% Page
+    Width: 18% Page
+
+[Line: SSB Signatory QR Img Ln]
+    Fields: SSB Signatory QR Img Fld
+
+[Field: SSB Signatory QR Img Fld]
+    Set as: ""
+    Align: Right
